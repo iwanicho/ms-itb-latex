@@ -1,0 +1,333 @@
+%-------------------------------------------------------------------%
+%
+% Konfigurasi dokumen LaTeX untuk laporan tesis IF ITB
+%
+% @author Petra Novandi
+%
+%-------------------------------------------------------------------%
+%
+% Berkas asli berasal dari Steven Lolong
+%
+%-------------------------------------------------------------------%
+
+%% Ukuran kertas
+\special{papersize=210mm,297mm}
+
+%% Setting margin
+\usepackage[top=3cm,bottom=3cm,left=3cm,right=2cm,a4paper]{geometry}
+
+%% Pilih Bahasa
+\usepackage[main=bahasa,english]{babel}
+
+%% the Times New Roman font for your document
+\usepackage{mathptmx}
+\usepackage{newtxtext}
+\usepackage{indentfirst}    %indentasi di awal paragraf
+\usepackage{array}
+
+% Spacing 1.5
+\usepackage{setspace}
+\renewcommand{\baselinestretch}{1.5}
+
+% Prevent overfull (or underfull) if possible
+%\setlength{\emergencystretch}{25pt}
+
+% Avoid widow and orphan lines if possible
+\widowpenalty500
+\clubpenalty10000
+
+%% Format citation
+\usepackage[utf8]{inputenc}
+%\usepackage[backend=bibtex,citestyle=numeric-verb]{biblatex}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{titling}
+\usepackage{blindtext}
+\usepackage{sectsty}
+\usepackage{chngcntr}
+\usepackage{etoolbox}
+\usepackage{hyperref}       % Package untuk link di daftar isi.
+\usepackage{titlesec}       % Package Format judul
+\usepackage[skip=0pt]{parskip}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[chapter]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{comment}
+\usepackage{cite}
+
+%% Setting judul
+\chapterfont{\centering \fontsize{14pt}{20pt}\selectfont}
+\titleformat{\chapter}[display]
+    {\fontsize{14pt}{0pt}\selectfont\centering\bfseries}
+    {\chaptertitlename\ \arabic{chapter}}{7pt}
+    {\fontsize{14pt}{0pt}\selectfont\bfseries}
+\titlespacing*{\chapter}{0pt}{1cm}{1\baselineskip} %supaya margin=4cm di halaman judul bab
+
+% Format judul section (dan sub(sub)section)
+\titleformat*{\section}{\bfseries\normalsize}
+\titleformat*{\subsection}{\bfseries\normalsize}
+\titleformat*{\subsubsection}{\bfseries\normalsize}
+\titlespacing*{\section}{0pt}{2ex}{0pt}
+\titlespacing*{\subsection}{0pt}{2ex}{0pt}
+\titlespacing*{\subsubsection}{0pt}{2ex}{0pt}
+
+%% Setting nomor pada subbsubsubbab
+\setcounter{secnumdepth}{3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  TABLE OF CONTENTS, LISTS OF FIGURES & TABLES  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[titles]{tocloft}
+\usepackage[titletoc]{appendix}
+\usepackage{tocbibind}
+
+% Judul bab (chapter) di ToC pakai titik-titik halaman
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+\addtocontents{toc}{\protect\renewcommand{\protect\cftchapdotsep}{\protect\cftdotsep}}
+
+% Kedalaman hierarki maksimum ToC
+% (yang masuk ToC hanya sampai subsection: I.1.1.)
+\setcounter{tocdepth}{2}
+
+% Hilangkan gap antar-bab di ToC
+\setlength{\cftbeforechapskip}{0pt}
+
+% Hilangkan indent sub-bab di ToC
+% \setlength{\cftsecindent}{0pt}% Remove indent for \section
+% \setlength{\cftsubsecindent}{0pt}% Remove indent for \subsection
+
+% Ubah font jadi normal
+\renewcommand{\cftchappagefont}{\normalfont}
+\renewcommand{\cftpartfont}{\normalfont}            % \part font in ToC
+\renewcommand{\cftchapfont}{\normalfont}            % \chapter font in ToC
+\renewcommand{\cftsecfont}{\normalfont}             % \section font in ToC
+\renewcommand{\cftsubsecfont}{\normalfont}          % \subsection font in ToC
+
+% Tambah kata "BAB" sebelum nomor bab di daftar isi
+% TODO: still problematic when used with list of appendices (uncomment these 4 following lines to reproduce the problem)
+\renewcommand{\cftchappresnum}{Bab~} % BAB before number in ToC
+\newlength{\mylen} % a scratch length
+\settowidth{\mylen}{\bfseries\cftchappresnum\cftchapaftersnum} % extra space
+\addtolength{\cftchapnumwidth}{\mylen} % add the extra space
+
+% Pisah daftar lampiran dari ToC
+%%%
+\renewcommand{\appendixtocname}{DAFTAR LAMPIRAN}
+
+\makeatletter
+\let\oldappendix\appendices
+
+\renewcommand{\appendices}{
+	\clearpage
+	% From now, everything goes to the app file and not to the toc
+	\let\tf@toc\tf@app
+	\addtocontents{app}{\protect\setcounter{tocdepth}{1}}
+	\immediate\write\@auxout{
+		\string\let\string\tf@toc\string\tf@app^^J
+	}
+	\oldappendix
+}%
+
+\newcommand{\listofappendices}{
+	\begingroup
+	\renewcommand{\contentsname}{\appendixtocname}
+	\let\@oldstarttoc\@starttoc
+	\def\@starttoc##1{\@oldstarttoc{app}}
+	% Reusing the code for \tableofcontents with different
+	%   \contentsname and different file handle app
+	\tableofcontents
+	\endgroup
+	\addtocontents{app}{\protect\renewcommand{\protect\cftchapdotsep}{\protect\cftdotsep}}
+}
+\makeatother
+%%%
+
+% Hilangkan gap antara entri gambar & tabel antarbab di daftar tabel 
+% dan daftar gambar (hanya terlihat kalau ada gambar/tabel di >1 bab)
+\newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}
+\addtocontents{lof}{\protect\noaddvspace}
+\addtocontents{lot}{\protect\noaddvspace}
+
+% ubah judul (TOC, LOF, LOT) jadi uppercase
+\usepackage{etoolbox}
+\patchcmd{\tableofcontents}{\contentsname}{\MakeUppercase\contentsname}{}{}
+\patchcmd{\listoffigures}{\listfigurename}{\MakeUppercase\listfigurename}{}{}
+\patchcmd{\listoftables}{\listtablename}{\MakeUppercase\listtablename}{}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  FLOATS: FIGURES, TABLES, ALGORITHMS  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Before:
+% ---
+% Counter untuk figure dan table.
+% \counterwithin{figure}{section}
+% \counterwithin{table}{section}
+% ---
+
+\usepackage{caption}
+\DeclareCaptionFont{fcap}{\fontsize{11}{15}\selectfont}
+\DeclareCaptionLabelFormat{scap}{#1 #2\hspace{1.5ex}}
+\usepackage[labelformat=scap, font=fcap, labelsep=none, justification=justified, format=hang]{caption}
+%\usepackage[labelformat=simple, font=fcap]{subcaption}
+%% Hack subfigure cross-ref agar pakai tanda kurung
+%%   e.g. Gambar II.2(a), bukan Gambar II.2a
+%% (method recommended in subcaption package documentation)
+%\renewcommand\thesubfigure{(\alph{subfigure})}
+
+% Counter untuk gambar dan tabel
+\renewcommand*{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand*{\thetable}{\arabic{chapter}.\arabic{table}}
+
+% Jarak spasi antara float dengan teks utama
+\captionsetup[figure]{belowskip=-1em}
+\captionsetup[subfigure]{belowskip=0pt}
+\setlength{\textfloatsep}{2\baselineskip}
+\setlength{\intextsep}{2\baselineskip}
+
+% Spasi single di environment table
+\AtBeginEnvironment{table}
+{\renewcommand{\baselinestretch}{1.0}}
+
+% Font lebih kecil untuk tabel
+\AtBeginEnvironment{table}
+{\fontsize{10pt}{15pt}\selectfont}
+
+% Spasi single di environment algorithm
+\AtBeginEnvironment{algorithm}
+{\renewcommand{\baselinestretch}{1.0}}
+
+% Rename "Algorithm" into "Algoritma"
+\makeatletter
+\renewcommand*{\ALG@name}{Algoritma}
+\newcommand{\algorithmname}{\ALG@name}
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%  MATHS AND EQUATIONS  %
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[fleqn]{amsmath}
+\setlength{\mathindent}{20pt}	% equation menjorok seperti paragraf baru
+\usepackage{amsfonts}
+\usepackage{mathtools}
+
+\newcommand{\starteq}{			% hack untuk menghilankan space sebelum & setelah equation
+	\setlength\abovedisplayskip{0pt}
+	\setlength\belowdisplayskip{0pt}}
+
+% Counter untuk equation
+\renewcommand*{\theequation}{\arabic{chapter}.\arabic{equation}}
+
+% Allow page breaks on long equations
+\allowdisplaybreaks[1-4]
+
+% Operator dan notasi custom tambahan
+% contoh: argmin dan argmax
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+% contoh: notasi bayes p(x | y)
+\newcommand{\bayes}[2]{p(#1 \mid #2)\xspace}
+
+%%%%%%%%%%%%%%%%%
+%  GANTT CHART  %
+%%%%%%%%%%%%%%%%%
+\usepackage{changepage}
+\usepackage{pgfgantt}
+\ganttset{calendar week text={\currentweek}}
+
+%%%%%%%%%%%%%%
+%  DIAGRAMS  %
+%%%%%%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, fit}
+\tikzstyle{block} = [rectangle, draw, minimum height=3em, minimum width=6em, text centered]
+\tikzstyle{pinstyle} = [pin edge={to-, thin, black}]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  GLOSSARY AND ABBREVIATIONS  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Load package acronym dan indexonlyfirst untuk hanya 
+% menunjukkan kemunculan pertama singkatan
+\usepackage[nomain, abbreviations, indexonlyfirst, automake]{glossaries-extra}
+
+% Buat glossary baru khusus untuk lambang
+\newglossary[slg]{symbols}{syi}{syg}{Daftar Lambang}
+
+% Buat glossary
+\makeglossaries
+
+% Hilangkan judul dari glossary
+\renewcommand{\glossarysection}[2][]{}
+
+% Style glossary untuk Daftar Singkatan
+\newglossarystyle{daftarsingkatan}{
+	% Dasarkan style pada style long3colheader
+	\setglossarystyle{long3colheader}
+	
+	\renewenvironment{theglossary}{\begin{longtable}{p{3cm}p{\glsdescwidth}p{\glspagelistwidth}}}{\end{longtable}}
+	
+	% Ganti header glossary
+	\renewcommand{\glossaryheader}{
+		\raggedright{SINGKATAN} &
+		\centering{Nama} &
+		\raggedright{Pemakaian pertama kali pada halaman}
+		\endhead
+	}
+	
+	% Ganti lebar kolom glossary
+	\renewcommand{\glsdescwidth}{10cm}
+	\renewcommand{\glspagelistwidth}{2.5cm}
+	
+	% Buat line break dalam sel menjadi 1 spasi
+	\renewcommand{\baselinestretch}{1.0} 
+	\renewcommand{\arraystretch}{1.5}
+	\selectfont
+	
+	% Ganti isi glossary menjadi singkatan - deskripsi - kemunculan pertama
+	\renewcommand{\glossentry}[2]{
+		\glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} 
+		& \glossentrydesc{##1}
+		& \centering ##2
+		\tabularnewline
+	}
+	
+	\renewcommand{\glsgroupskip}{}
+}
+
+% Style glossary untuk Daftar Lambang
+\newglossarystyle{daftarlambang}{
+	% Dasarkan style pada style long3colheader
+	\setglossarystyle{long3colheader}
+	% Hack untuk mengubah lebar kolom lambang
+	\renewenvironment{theglossary}{\begin{longtable}{p{3cm}p{\glsdescwidth}p{\glspagelistwidth}}}{\end{longtable}}
+	% Ganti header glossary
+	\renewcommand{\glossaryheader}{
+		\raggedright{LAMBANG} &
+		\centering{Nama} &
+		\raggedright{Pemakaian pertama kali pada halaman}
+		\endhead
+	}
+	
+	% Ganti lebar kolom glossary
+	\renewcommand{\glsdescwidth}{10cm}
+	\renewcommand{\glspagelistwidth}{2.5cm}
+	
+	% Buat line break dalam sel menjadi 1 spasi
+	\renewcommand{\baselinestretch}{1.0} 
+	\renewcommand{\arraystretch}{1.5}
+	\selectfont
+	
+	% Ganti isi glossary menjadi lambang - deskripsi - kemunculan pertama
+	\renewcommand{\glossentry}[2]{
+		\glsentryitem{##1}\glstarget{##1}{\glossentryname{##1}} 
+		& \glossentrydesc{##1}
+		& \centering ##2
+		\tabularnewline
+	}
+	
+	\renewcommand{\glsgroupskip}{}
+}
