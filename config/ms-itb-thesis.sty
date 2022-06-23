@@ -16,29 +16,23 @@
 %% Setting margin
 \usepackage[top=3cm,bottom=3cm,left=3cm,right=2cm,a4paper]{geometry}
 
-%% Pilih Bahasa
-\usepackage[main=bahasa,english]{babel}
-
-%% the Times New Roman font for your document
-\usepackage{mathptmx}
-\usepackage{newtxtext}
-\usepackage{indentfirst}    %indentasi di awal paragraf
-\usepackage{array}
-
 % Spacing 1.5
 \usepackage{setspace}
 \renewcommand{\baselinestretch}{1.5}
 
 % Prevent overfull (or underfull) if possible
-%\setlength{\emergencystretch}{25pt}
+\setlength{\emergencystretch}{25pt}
 
 % Avoid widow and orphan lines if possible
 \widowpenalty500
 \clubpenalty10000
 
-%% Format citation
+%% Format citation and writings
+\usepackage{mathptmx}
+\usepackage{newtxtext}		% the Times New Roman font for your document
+\usepackage{indentfirst}    % indentasi di awal paragraf
+\usepackage{array}
 \usepackage[utf8]{inputenc}
-%\usepackage[backend=bibtex,citestyle=numeric-verb]{biblatex}
 \usepackage{csquotes}
 \usepackage{graphicx}
 \usepackage{titling}
@@ -46,16 +40,15 @@
 \usepackage{sectsty}
 \usepackage{chngcntr}
 \usepackage{etoolbox}
-\usepackage{hyperref}       % Package untuk link di daftar isi.
-\usepackage{titlesec}       % Package Format judul
-\usepackage[skip=0pt]{parskip}
-
+\usepackage{hyperref}       	% Package untuk link di daftar isi.
+\usepackage{titlesec}       	% Package Format judul
+\usepackage[skip=0pt]{parskip}	% untuk menghilangkan indentasi pad abagian tertentu
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage[chapter]{algorithm}
 \usepackage{algpseudocode}
 \usepackage{comment}
-\usepackage{cite}
+\usepackage{cite}			% kita pakai format dari .bst, bukan biblatex
 
 %% Setting judul
 \chapterfont{\centering \fontsize{14pt}{20pt}\selectfont}
@@ -63,7 +56,7 @@
     {\fontsize{14pt}{0pt}\selectfont\centering\bfseries}
     {\chaptertitlename\ \arabic{chapter}}{7pt}
     {\fontsize{14pt}{0pt}\selectfont\bfseries}
-\titlespacing*{\chapter}{0pt}{1cm}{1\baselineskip} %supaya margin=4cm di halaman judul bab
+\titlespacing*{\chapter}{0pt}{1cm}{1\baselineskip} % supaya margin=4cm di halaman judul bab
 
 % Format judul section (dan sub(sub)section)
 \titleformat*{\section}{\bfseries\normalsize}
@@ -98,19 +91,31 @@
 % \setlength{\cftsecindent}{0pt}% Remove indent for \section
 % \setlength{\cftsubsecindent}{0pt}% Remove indent for \subsection
 
-% Ubah font jadi normal
+% Ubah font ToC jadi normal
 \renewcommand{\cftchappagefont}{\normalfont}
 \renewcommand{\cftpartfont}{\normalfont}            % \part font in ToC
 \renewcommand{\cftchapfont}{\normalfont}            % \chapter font in ToC
 \renewcommand{\cftsecfont}{\normalfont}             % \section font in ToC
 \renewcommand{\cftsubsecfont}{\normalfont}          % \subsection font in ToC
 
-% Tambah kata "BAB" sebelum nomor bab di daftar isi
+% Tambah kata "Bab" sebelum nomor bab di daftar isi
 % TODO: still problematic when used with list of appendices (uncomment these 4 following lines to reproduce the problem)
 \renewcommand{\cftchappresnum}{Bab~} % BAB before number in ToC
 \newlength{\mylen} % a scratch length
 \settowidth{\mylen}{\bfseries\cftchappresnum\cftchapaftersnum} % extra space
 \addtolength{\cftchapnumwidth}{\mylen} % add the extra space
+
+% ubah judul (ToC, LoF, LoT) jadi uppercase
+\usepackage{etoolbox}
+\patchcmd{\tableofcontents}{\contentsname}{\MakeUppercase\contentsname}{}{}
+\patchcmd{\listoffigures}{\listfigurename}{\MakeUppercase\listfigurename}{}{}
+\patchcmd{\listoftables}{\listtablename}{\MakeUppercase\listtablename}{}{}
+
+% Hacks to rename all chapter-level titles in ToC
+%\renewcommand*\contentsname{DAFTAR ISI}
+%\renewcommand*\appendixtocname{DAFTAR LAMPIRAN}
+%\renewcommand*\listfigurename{DAFTAR GAMBAR DAN ILUSTRASI}
+%\renewcommand*\listtablename{DAFTAR TABEL}
 
 % Pisah daftar lampiran dari ToC
 %%%
@@ -128,7 +133,7 @@
 		\string\let\string\tf@toc\string\tf@app^^J
 	}
 	\oldappendix
-}%
+}
 
 \newcommand{\listofappendices}{
 	\begingroup
@@ -149,12 +154,6 @@
 \newcommand*{\noaddvspace}{\renewcommand*{\addvspace}[1]{}}
 \addtocontents{lof}{\protect\noaddvspace}
 \addtocontents{lot}{\protect\noaddvspace}
-
-% ubah judul (TOC, LOF, LOT) jadi uppercase
-\usepackage{etoolbox}
-\patchcmd{\tableofcontents}{\contentsname}{\MakeUppercase\contentsname}{}{}
-\patchcmd{\listoffigures}{\listfigurename}{\MakeUppercase\listfigurename}{}{}
-\patchcmd{\listoftables}{\listtablename}{\MakeUppercase\listtablename}{}{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  FLOATS: FIGURES, TABLES, ALGORITHMS  %

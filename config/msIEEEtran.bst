@@ -1,3 +1,5 @@
+%% modified by Nicholas Putra Rihandoko to fulfill Teknik Mesin ITB's reference Style
+
 %%
 %% IEEEtran.bst
 %% BibTeX Bibliography Style file for IEEE Journals and Conferences (unsorted)
@@ -225,17 +227,17 @@ FUNCTION {completed.message}
 %% STRING CONSTANTS %%
 %%%%%%%%%%%%%%%%%%%%%%
 
-FUNCTION {bbl.and}{ "and" }
+FUNCTION {bbl.and}{ "dan" } %"and"
 FUNCTION {bbl.etal}{ "et~al." }
 FUNCTION {bbl.editors}{ "eds." }
 FUNCTION {bbl.editor}{ "ed." }
-FUNCTION {bbl.edition}{ "ed." }
-FUNCTION {bbl.volume}{ "vol." }
+FUNCTION {bbl.edition}{ "Edisi" } %"ed."
+FUNCTION {bbl.volume}{ "" } %"vol."
 FUNCTION {bbl.of}{ "of" }
-FUNCTION {bbl.number}{ "no." }
-FUNCTION {bbl.in}{ "in" }
-FUNCTION {bbl.pages}{ "pp." }
-FUNCTION {bbl.page}{ "p." }
+FUNCTION {bbl.number}{ "" } %"no."
+FUNCTION {bbl.in}{ "" } %"in"
+FUNCTION {bbl.pages}{ "hal." } %"pp."
+FUNCTION {bbl.page}{ "hal." } %"p."
 FUNCTION {bbl.chapter}{ "ch." }
 FUNCTION {bbl.paper}{ "paper" }
 FUNCTION {bbl.part}{ "pt." }
@@ -699,7 +701,6 @@ FUNCTION {fin.entry}
 write$
 newline$
 }
-
 
 FUNCTION {is.last.char.not.punct}
 { duplicate$
@@ -1307,10 +1308,11 @@ FUNCTION {format.editors}
 
 
 %% date
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 FUNCTION {format.date}
 {
-  month "month" bibinfo.check duplicate$ empty$
+  "" duplicate$ empty$
   year  "year" bibinfo.check duplicate$ empty$
     { swap$ 'skip$
         { this.to.prev.status
@@ -1365,6 +1367,24 @@ FUNCTION {format.date.electronic}
 
 
 %% edition/title
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+FUNCTION {ms.format.article.title}
+{ title "title" bibinfo.check
+  duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      cap.status.std
+      select.language
+      duplicate$ empty$
+        { pop$ "" }
+        { "{" swap$ * "}" * }
+      if$
+    }
+  if$
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % Note: IEEE considers the edition to be closely associated with
 % the title of a book. So, in IEEEtran.bst the edition is normally handled 
@@ -1575,6 +1595,115 @@ FUNCTION {format.school}
 
 
 %% volume/number/series/chapter/pages
+
+
+%% https://tex.stackexchange.com/questions/286680/how-to-edit-a-bst-file-to-get-bold-volume-number-in-case-of-articles
+FUNCTION {bold}
+{ duplicate$ empty$
+    {pop$ "" }
+    { "{\bfseries" swap$ * "}" * }
+  if$
+}
+
+FUNCTION {parens}
+ { duplicate$ empty$
+    { pop$ "" }
+    { "(" swap$ * ")" * }
+   if$
+}
+
+FUNCTION {boldparens}
+{ duplicate$ empty$
+    {pop$ "" }
+    { "{\bfseries(" swap$ * ")}" * }
+  if$
+}
+
+FUNCTION {ms.output.vol}
+{ swap$
+  #1
+     { "" * }
+     { skip$ }
+   if$
+  write$
+  prev.status.nline nline.newblock =
+     { newline$ "\newblock " write$ }
+     { skip$ }
+   if$
+}
+
+FUNCTION {ms.output.num}
+{ swap$
+  #1
+     { ": " * }
+     { skip$ }
+   if$
+  write$
+  prev.status.nline nline.newblock =
+     { newline$ "\newblock " write$ }
+     { skip$ }
+   if$
+}
+
+FUNCTION {ms.format.vol.article}
+{ volume empty.field.to.null.string
+  duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      bbl.volume
+      status.cap
+        { capitalize }
+        { skip$ }
+      if$
+      swap$ tie.or.space.prefix
+      bold "volume" bibinfo.check
+      * *
+      cap.status.std
+    }
+  if$
+  output
+  number empty.field.to.null.string
+  duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      status.cap
+         { bbl.number capitalize }
+         { bbl.number }
+       if$
+      swap$ "" swap$
+      boldparens "number" bibinfo.check
+      * *
+      cap.status.std
+    }
+  if$
+  duplicate$ empty$
+    'pop$
+    'ms.output.vol
+  if$
+  pages duplicate$ empty$ 'skip$
+    { this.to.prev.status
+      this.status.std
+      duplicate$ is.multiple.pages
+        {
+          "" swap$
+          n.dashify
+        }
+        {
+          "" swap$
+        }
+      if$
+      tie.or.space.prefix
+      "pages" bibinfo.check
+      * *
+      cap.status.std
+    }
+  if$
+  duplicate$ empty$
+    'pop$
+    'ms.output.num
+  if$
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 FUNCTION {format.volume}
 { volume empty.field.to.null.string
@@ -1959,14 +2088,15 @@ FUNCTION {article}
   if.url.alt.interword.spacing
   format.authors "author" output.warn
   name.or.dash
-  format.article.title "title" output.warn
+  ms.format.article.title "title" output.warn
   format.journal "journal" bibinfo.check "journal" output.warn
-  format.volume output
-  format.number.if.use.for.article output
-  format.pages output
+  ms.format.vol.article
+  %format.volume output
+  %format.number.if.use.for.article output
+  %format.pages output
   format.date "year" output.warn
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -1981,16 +2111,16 @@ FUNCTION {book}
   if$
   name.or.dash
   format.book.title.edition output
-  format.series output
+  %format.series output
+  %format.volume output
+  %format.number output
   author empty$
     { skip$ }
     { format.editors output }
   if$
   format.address.publisher.date output
-  format.volume output
-  format.number output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2006,8 +2136,8 @@ FUNCTION {booklet}
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
   format.date output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2023,7 +2153,7 @@ FUNCTION {electronic}
   format.howpublished "howpublished" bibinfo.check output
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
-  format.note output
+  %format.note output
   format.url output
   fin.entry
   empty.entry.warn
@@ -2046,8 +2176,8 @@ FUNCTION {inbook}
   format.number output
   format.chapter output
   format.pages output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2067,8 +2197,8 @@ FUNCTION {incollection}
   format.number output
   format.chapter output
   format.pages output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2093,8 +2223,8 @@ FUNCTION {inproceedings}
   if$
   format.paper output
   format.pages output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2110,8 +2240,8 @@ FUNCTION {manual}
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
   format.date output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2127,8 +2257,8 @@ FUNCTION {mastersthesis}
   format.school "school" bibinfo.warn output
   format.address "address" bibinfo.check output
   format.date "year" output.warn
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2145,8 +2275,8 @@ FUNCTION {misc}
   format.address "address" bibinfo.check output
   format.pages output
   format.date output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   empty.entry.warn
   if.url.std.interword.spacing
@@ -2161,8 +2291,8 @@ FUNCTION {patent}
   format.article.title output
   format.patent.nationality.type.number output
   format.patent.date output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   empty.entry.warn
   if.url.std.interword.spacing
@@ -2180,8 +2310,8 @@ FUNCTION {periodical}
   format.number output
   format.organization "organization" bibinfo.check output
   format.date "year" output.warn
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2197,8 +2327,8 @@ FUNCTION {phdthesis}
   format.school "school" bibinfo.warn output
   format.address "address" bibinfo.check output
   format.date "year" output.warn
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2219,8 +2349,8 @@ FUNCTION {proceedings}
       format.address.publisher.date output
     }
   if$
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2236,8 +2366,8 @@ FUNCTION {standard}
   format.organization.institution.standard.type.number output
   format.revision output
   format.date output
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2254,8 +2384,8 @@ FUNCTION {techreport}
   format.address "address" bibinfo.check output
   format.tech.report.number output.nonnull
   format.date "year" output.warn
-  format.note output
-  format.url output
+  %format.note output
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }
@@ -2268,8 +2398,8 @@ FUNCTION {unpublished}
   name.or.dash
   format.article.title "title" output.warn
   format.date output
-  format.note "note" output.warn
-  format.url output
+  %format.note "note" output.warn
+  %format.url output
   fin.entry
   if.url.std.interword.spacing
 }

@@ -1,18 +1,18 @@
 \documentclass[12pt, a4paper, onecolumn, oneside, final]{report}
 
+%% Pilih Bahasa
+\usepackage[main=bahasa,english]{babel}
 \input{config/ms-itb-thesis.sty}
 
-%\bibliography{config/references}
-
 \begin{document}
-
 % Hyphenation penalty
 \include{hyphenation-id}
 \hyphenpenalty=10000
 \tolerance=1
 \sloppy
 
-%Basic configuration
+%----------------------------------------------------------------%
+% DOCUMENT'S INFORMATION
 \title{
     Sintering and Characterization of
     Solid Electrolyte Li\textsubscript{1.3}Al\textsubscript{0.3}Ti\textsubscript{1.7}(PO\textsubscript{4})\textsubscript{3}
@@ -39,26 +39,21 @@
 \newcommand{\facultyID}{Fakultas Teknik Mesin dan Dirgantara}
 \newcommand{\university}{Institut Teknologi Bandung}
 
-%Konfigurasi chapters sebelum Bab 1
-\pagenumbering{roman}
+%----------------------------------------------------------------%
+% FRONTMATTER (chapters sebelum Bab 1)
+\pagenumbering{roman}   %halaman pakai nomor romawi
 \setcounter{page}{0}
-\input{chapters/cover}
-\input{chapters/approval}
+%\input{chapters/cover}
+\input{chapters/coverID}
+%\input{chapters/approval}
+\input{chapters/approvalID}
 \input{chapters/statement}
-
-%\pagestyle{plain}
 \input{chapters/abstract-id}
 \input{chapters/abstract-en}
 \input{chapters/forewords}
 
-% Hacks to rename all chapter-level titles in ToC
-%\renewcommand*\contentsname{DAFTAR ISI}
-%\renewcommand*\appendixtocname{DAFTAR LAMPIRAN}
-%\renewcommand*\listfigurename{DAFTAR GAMBAR DAN ILUSTRASI}
-%\renewcommand*\listtablename{DAFTAR TABEL}
-%\renewcommand*\bibname{DAFTAR PUSTAKA}
-
-% Lanjutan frontmatter
+%----------------------------------------------------------------%
+% DAFTAR ISI, GAMBAR, TABEL, LAMBANG, SINGKATAN, LAMPIRAN
 \tableofcontents
 \renewcommand{\cftchappresnum}{} % remove Bab before index in appendix
 \addtolength{\cftchapnumwidth}{-\mylen} % remove the extra space
@@ -76,57 +71,30 @@
 \input{chapters/abbreviations}
 
 %----------------------------------------------------------------%
+% MULAI BAB
 % Konfigurasi Bab
-%----------------------------------------------------------------%
 \pagenumbering{arabic}
-\setcounter{page}{0}
+\setcounter{page}{1}
 \renewcommand{\chaptername}{Bab}
-%\renewcommand{\thechapter}{\Roman{chapter}}
 \setlength{\parindent}{20pt}
-%----------------------------------------------------------------%
-
-%----------------------------------------------------------------%
-% Dafter Bab
 % Untuk menambahkan daftar bab, buat berkas bab misalnya `chapter-6` di direktori `chapters`, dan masukkan ke sini.
-%----------------------------------------------------------------%
 \input{chapters/chapter-1}
 \input{chapters/chapter-2}
 \input{chapters/chapter-3}
 \input{chapters/chapter-4}
 \input{chapters/chapter-5}
+
 %----------------------------------------------------------------%
-
-% Daftar pustaka
-%\printbibliography
-
-%\begingroup
-%    \renewcommand{\baselinestretch}{1.0}
-%    \printbibliography[heading=bibintoc]
-%\endgroup
-    
-%\clearpage
+% DAFTAR PUSTAKA
+\clearpage
+\renewcommand*\bibname{DAFTAR PUSTAKA}
 \bibliographystyle{config/msIEEEtran}
 \bibliography{config/references}
 
-%$ INDEX
-% Before:
-% ---
-% Index
-% \appendix
-% \addcontentsline{toc}{part}{Lampiran}
-% \part*{Lampiran}
-% \input{chapters/appendix-1}
-% \input{chapters/appendix-2}
-% ---
-
-% Format judul bab lampiran
-\titleformat{\chapter}[hang]
-    {\large\bfseries}
-    {\chaptertitlename\ \thechapter}{1em}
-    {\large\bfseries}
-\titlespacing*{\chapter}{0pt}{-1.5\baselineskip}{\parskip}
-    
+%----------------------------------------------------------------%
+% MULAI LAMPIRAN
 \clearpage
+\pagestyle{empty}
 \begin{center}
     \topskip0pt
     \vspace*{\fill}
@@ -134,7 +102,13 @@
     \vspace*{\fill}
 \end{center}
 \clearpage
-    
+
+% Format judul bab lampiran 
+\titleformat{\chapter}[display]
+    {\fontsize{14pt}{0pt}\centering\selectfont\bfseries}
+    {\chaptertitlename\ \thechapter}{7pt}
+    {\fontsize{14pt}{0pt}\selectfont\bfseries}
+
 \begin{appendices}
     \input{chapters/appendix-1}
     \input{chapters/appendix-2}
