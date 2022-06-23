@@ -1,14 +1,15 @@
 Template LaTeX Teknik Mesin ITB
 ===================================
 oleh: Nicholas Putra Rihandoko
-templat asli oleh: Petra Novandi <me@petrabarus.net>
+
+template asli oleh: Petra Novandi <me@petrabarus.net>
 
 diperbarui oleh: [Dionesius Agung](https://github.com/dionesiusap)
 
 diadaptasi oleh: [Irfan Tito](https://github.com/titoirfan)
 
 
-Dokumen ini merupakan templat LaTeX yang ditujukan untuk laporan
+Dokumen ini merupakan template LaTeX yang ditujukan untuk laporan
 tesis di program studi Teknik Mesin ITB. Template ini penulis
 gunakan dalam penulisan laporan tesis penulis dan dengan semangat
 berbagi penulis memutuskan untuk mempublikasikan template ini agar
@@ -23,8 +24,10 @@ Kebutuhan
 Program telah diuji dalam sistem operasi Linux Ubuntu 14.04.
 > **Update (2020/06/04)** Template telah diuji dan berjalan dengan baik dalam OS Linux
 > Ubuntu 16.04 dan 18.04.
+
 > **Update (2020/09/28)** Template telah diuji dan berjalan dengan baik dalam OS Linux
 > Ubuntu 20.04.
+
 > **Update (2022/06/22)** Template telah diuji dan berjalan dengan baik dalam OS Windows
 > Windows 11 21H2.
 
@@ -48,7 +51,7 @@ Untuk melakukan instalasi perangkat lunak yang dibutuhkan pada sistem operasi Wi
 * LaTex Utilities (by tecosaur)
 
 3. Ikuti pengaturan pada link youtube berikut ini.
-* 
+* https://youtu.be/XpD3pKA0SCw
 ```
 // pada bagian "latex-workshop.latex.recipes"
         {
