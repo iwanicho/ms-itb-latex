@@ -30,7 +30,6 @@
 %% Format citation and writings
 \usepackage{mathptmx}
 \usepackage{newtxtext}		% the Times New Roman font for your document
-\usepackage{indentfirst}    % indentasi di awal paragraf
 \usepackage{array}
 \usepackage[utf8]{inputenc}
 \usepackage{csquotes}
@@ -42,13 +41,17 @@
 \usepackage{etoolbox}
 \usepackage{hyperref}       	% Package untuk link di daftar isi.
 \usepackage{titlesec}       	% Package Format judul
-\usepackage[skip=0pt]{parskip}	% untuk menghilangkan indentasi pad abagian tertentu
+\usepackage[skip=0pt]{parskip}	% untuk menghilangkan indentasi pada bagian tertentu
+\usepackage{indentfirst}		% indentasi di awal paragraf
+\setlength{\parindent}{1.3cm}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage[chapter]{algorithm}
 \usepackage{algpseudocode}
 \usepackage{comment}
-\usepackage{cite}			% kita pakai format dari .bst, bukan biblatex
+\usepackage{cite}				% kita pakai format dari .bst, bukan biblatex
+\usepackage{enumitem}
+\setlist{nolistsep,leftmargin=1.3cm}
 
 %% Setting judul
 \chapterfont{\centering \fontsize{14pt}{20pt}\selectfont}
@@ -59,6 +62,9 @@
 \titlespacing*{\chapter}{0pt}{1cm}{1\baselineskip} % supaya margin=4cm di halaman judul bab
 
 % Format judul section (dan sub(sub)section)
+\makeatletter
+\renewcommand*{\@seccntformat}[1]{\hbox to 1.3cm{\csname the#1\endcsname}}
+\makeatother
 \titleformat*{\section}{\bfseries\normalsize}
 \titleformat*{\subsection}{\bfseries\normalsize}
 \titleformat*{\subsubsection}{\bfseries\normalsize}
@@ -183,7 +189,7 @@
 \captionsetup[figure]{belowskip=-1em}
 \captionsetup[subfigure]{belowskip=0pt}
 \setlength{\textfloatsep}{2\baselineskip}
-\setlength{\intextsep}{2\baselineskip}
+\setlength{\intextsep}{1\baselineskip}
 
 % Spasi single di environment table
 \AtBeginEnvironment{table}
@@ -208,11 +214,11 @@
 %  MATHS AND EQUATIONS  %
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[fleqn]{amsmath}
-\setlength{\mathindent}{20pt}	% equation menjorok seperti paragraf baru
+\setlength{\mathindent}{1.3cm}	% equation menjorok seperti paragraf baru
 \usepackage{amsfonts}
 \usepackage{mathtools}
 
-\newcommand{\starteq}{			% hack untuk menghilankan space sebelum & setelah equation
+\newcommand{\starteq}{			% hack untuk menghilangkan space sebelum & setelah equation
 	\setlength\abovedisplayskip{0pt}
 	\setlength\belowdisplayskip{0pt}}
 
