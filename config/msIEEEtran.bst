@@ -174,7 +174,7 @@ FUNCTION {default.name.latex.cmd}{ "" }
 
 
 % The default URL prefix.
-FUNCTION {default.name.url.prefix}{ "[Online]. Available:" }
+FUNCTION {default.name.url.prefix}{ "(Online), " }
 
 
 % Other controls that cannot be accessed via IEEEtranBSTCTL entry type.
@@ -272,18 +272,18 @@ FUNCTION {repeated.name.dashes} { "------" }
 %% PREDEFINED STRING MACROS %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-MACRO {jan} {"Jan."}
-MACRO {feb} {"Feb."}
-MACRO {mar} {"Mar."}
-MACRO {apr} {"Apr."}
-MACRO {may} {"May"}
-MACRO {jun} {"Jun."}
-MACRO {jul} {"Jul."}
-MACRO {aug} {"Aug."}
-MACRO {sep} {"Sep."}
-MACRO {oct} {"Oct."}
-MACRO {nov} {"Nov."}
-MACRO {dec} {"Dec."}
+MACRO {jan} {"Januari"}
+MACRO {feb} {"Februari"}
+MACRO {mar} {"Maret"}
+MACRO {apr} {"April"}
+MACRO {may} {"Mei"}
+MACRO {jun} {"Juni"}
+MACRO {jul} {"Juli"}
+MACRO {aug} {"Agustus"}
+MACRO {sep} {"September"}
+MACRO {oct} {"Oktober"}
+MACRO {nov} {"November"}
+MACRO {dec} {"Desember."}
 
 
 
@@ -1337,8 +1337,8 @@ FUNCTION {format.date}
 }
 
 FUNCTION {format.date.electronic}
-{ month "month" bibinfo.check duplicate$ empty$
-  year  "year" bibinfo.check duplicate$ empty$
+{ year  "year" bibinfo.check duplicate$ empty$
+  month "month" bibinfo.check duplicate$ empty$  
     { swap$ 
         { pop$ }
         { "there's a month but no year in " cite$ * warning$
@@ -1353,7 +1353,7 @@ FUNCTION {format.date.electronic}
     }
     { swap$ 
         { swap$ pop$ ")" * "(" swap$ * }
-        { "(" swap$ * ", " * swap$ * ")" * }
+        { "diakses " swap$ * " " * swap$ * ")." * }
       if$
     this.to.prev.status
     punct.no 'this.status.punct :=
@@ -2060,7 +2060,7 @@ FUNCTION {format.url}
     { this.to.prev.status
       this.status.std
       cap.yes 'status.cap :=
-      name.url.prefix " " *
+      name.url.prefix "(" *
       "\url{" * url * "}" *
       punct.no 'this.status.punct :=
       punct.period 'prev.status.punct :=
@@ -2148,13 +2148,13 @@ FUNCTION {electronic}
   if.url.alt.interword.spacing
   format.authors output
   name.or.dash
-  format.date.electronic output
   format.article.title.electronic output
   format.howpublished "howpublished" bibinfo.check output
   format.organization "organization" bibinfo.check output
   format.address "address" bibinfo.check output
   %format.note output
   format.url output
+  format.date.electronic output
   fin.entry
   empty.entry.warn
   if.url.std.interword.spacing

@@ -17,7 +17,7 @@
 \usepackage[top=3cm,bottom=3cm,left=3cm,right=2cm,a4paper]{geometry}
 
 % Spacing 1.5
-\usepackage{setspace}
+\usepackage[nodisplayskipstretch]{setspace}
 \renewcommand{\baselinestretch}{1.5}
 
 % Prevent overfull (or underfull) if possible
@@ -53,6 +53,7 @@
 \usepackage{enumitem}
 \setlist{nolistsep,leftmargin=1.3cm}
 \usepackage{notoccite}			% supaya ga ada referensi di TOC
+\usepackage{stackengine}
 
 %% Setting judul
 \chapterfont{\centering \fontsize{14pt}{20pt}\selectfont}
@@ -171,11 +172,13 @@
 % \counterwithin{figure}{section}
 % \counterwithin{table}{section}
 % ---
+\usepackage{multirow}
 
 \usepackage{caption}
 \DeclareCaptionFont{fcap}{\fontsize{11}{15}\selectfont}
 \DeclareCaptionLabelFormat{scap}{#1 #2\hspace{1.5ex}}
-\usepackage[labelformat=scap, font=fcap, labelsep=none, justification=justified, format=hang]{caption}
+\usepackage[labelformat=scap, font=fcap, labelsep=none, justification=centering, format=hang]{caption}
+\newcommand{\longcaption}[2][]{\caption[#1]{#1 #2}}
 %\usepackage[labelformat=simple, font=fcap]{subcaption}
 %% Hack subfigure cross-ref agar pakai tanda kurung
 %%   e.g. Gambar II.2(a), bukan Gambar II.2a
@@ -188,7 +191,7 @@
 
 % Jarak spasi antara float dengan teks utama
 \captionsetup[figure]{belowskip=-1em}
-\captionsetup[subfigure]{belowskip=0pt}
+%\captionsetup[subfigure]{belowskip=0pt}
 \setlength{\textfloatsep}{2\baselineskip}
 \setlength{\intextsep}{1\baselineskip}
 
